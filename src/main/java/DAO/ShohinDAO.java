@@ -96,7 +96,26 @@ public class ShohinDAO {
 	}
 
 	public int delete(String shohinId) {
-		return 0;
+		String sql = "DELETE FROM shohin " + "WHERE shohin_id = ? ;";
+		int delCnt = 0;
+
+		try {
+			Class.forName("org.postgresql.Driver");
+			try (Connection conn = DriverManager.getConnection(JDBC_URL, DB_USER, DB_PASS);
+					PreparedStatement pStmt = conn.prepareStatement(sql);) {
+
+				pStmt.setString(1, shohinId);
+
+				delCnt = pStmt.executeUpdate();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				return delCnt;
+			}
+		} catch (Exception e) {
+			return delCnt;
+		}
+		return delCnt;
 	}
 
 	public List<ShohinRecord> findAll() {
